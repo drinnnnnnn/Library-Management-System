@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Accounts - Admin</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="http://localhost/WebDev_Repository/styles/admin_css/admin_navbar.css">
+<link rel="stylesheet" href="http://localhost/WebDev_Repository/styles/admin_dashboard.css">
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #334155, #0f172a);
+  background-attachment: fixed;
+  font-family: 'Poppins', sans-serif;
+}
+
+.main-content {
+  flex: 1;
+  padding: 30px;
+  color: #000;
+}
+
+.dashboard-box {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  margin-left: 40px;
+  width: 1100px;
+}
+
+.content-box {
+  margin-top: 20px;
+  background: #f5f5f5;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.search-input {
+  padding: 8px 12px;
+  width: 320px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background: #e1e8eb;
+}
+
+td {
+  background: #ffffff;
+}
+
+.status-active {
+  color: #1e7e34;
+  font-weight: 700;
+}
+
+.status-inactive {
+  color: #c0392b;
+  font-weight: 700;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.btn-suspend {
+  background: #f36466;
+  color: white;
+}
+
+.btn-activate {
+  background: #28a745;
+  color: white;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR (IDENTICAL TO ADMIN DASHBOARD) -->
+<aside class="sidebar">
+  <div>
+    <div class="logo-container">
+      <img src="http://localhost/WebDev_Repository/assets/img_icon/granby_logo.png" class="logo-img">
+      <h3 class="logo-title">GCST Library</h3>
+    </div>
+
+    <nav class="nav-menu">
+      <a href="admin_dashb.html" class="nav-link">
+        <img src="http://localhost/WebDev_Repository/assets/sidebar_img/dashbc.png" class="icon">Dashboard
+      </a>
+      <a href="admin_create.html" class="nav-link">
+        <img src="http://localhost/WebDev_Repository/assets/sidebar_img/addgrey.png" class="icon">Create
+      </a>
+      <a href="admin_books.html" class="nav-link">
+        <img src="http://localhost/WebDev_Repository/assets/sidebar_img/bookpen.png" class="icon">Books
+      </a>
+      <a href="admin_student_acc.html" class="nav-link active">
+        <img src="http://localhost/WebDev_Repository/assets/sidebar_img/student_acc.png" class="icon">Student Account
+      </a>
+      <a href="#" class="nav-link logout" onclick="confirmLogout(event)">
+        <img src="http://localhost/WebDev_Repository/assets/sidebar_img/outv.png" class="icon">Logout
+      </a>
+    </nav>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+  <div class="dashboard-box">
+    <h1>Student Accounts</h1>
+
+    <div class="content-box">
+      <div class="header-row">
+        <h3>All Students</h3>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search Student ID or Name">
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Borrowed Books</th>
+            <th>Overdue Books</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="studentTable"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+let students = [];
+
+fetch('/WebDev_Repository/utils/get_students.php')
+  .then(res => res.json())
+  .then(data => {
+    students = data.students;
+    renderTable(students);
+  });
+
+function renderTable(data){
+  const tbody = document.getElementById("studentTable");
+  tbody.innerHTML = "";
+
+  data.forEach(s => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${s.student_id}</td>
+        <td>${s.student_name}</td>
+        <td>${s.borrowed}</td>
+        <td>${s.overdue}</td>
+        <td class="${s.status === 'Active' ? 'status-active' : 'status-inactive'}">${s.status}</td>
+        <td>
+          <button class="action-btn ${s.status === 'Active' ? 'btn-suspend' : 'btn-activate'}"
+            onclick="toggleStatus('${s.student_id}', '${s.status}')">
+            ${s.status === 'Active' ? 'Suspend' : 'Activate'}
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+document.getElementById("searchInput").addEventListener("input", e => {
+  const val = e.target.value.toLowerCase();
+  renderTable(
+    students.filter(s =>
+      s.student_id.toLowerCase().includes(val) ||
+      s.student_name.toLowerCase().includes(val)
+    )
+  );
+});
+
+function toggleStatus(id, status){
+  if(confirm("Are you sure you want to change this account status?")){
+    // backend hook here
+    alert("Status updated for " + id);
+  }
+}
+
+function confirmLogout(e){
+  e.preventDefault();
+  if(confirm("Are you sure you want to logout?")){
+    localStorage.clear();
+    window.location.href = "http://localhost/WebDev_Repository/pages/sign_in_admin_librarian.html";
+  }
+}
+</script>
+
+</body>
+</html>

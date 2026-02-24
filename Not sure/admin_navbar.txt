@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reports - Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="http://localhost/WebDev_Repository/styles/admin_css/admin_navbar.css" />
+  
+</head>
+<body>
+  
+<aside class="sidebar">
+    <div>
+      <div class="logo-container">
+        <img src="http://localhost/WebDev_Repository/assets/img_icon/granby_logo.png" alt="Logo" class="logo-img">
+        <h3 class="logo-title">GCST Library</h3>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="http://localhost/WebDev_Repository/pages/admin/admin_dashb.html" class="nav-link active">
+          <img src="http://localhost/WebDev_Repository/assets/sidebar_img/dashbc.png" alt="Dashboard Icon" class="icon">
+          Dashboard
+        </a>
+        <a href="http://localhost/WebDev_Repository/pages/admin/admin_create.html" class="nav-link">
+          <img src="http://localhost/WebDev_Repository/assets/sidebar_img/addgrey.png" alt="Dashboard Icon" class="icon">
+          Create
+        </a>
+        <a href="http://localhost/WebDev_Repository/pages/admin/admin_books.html" class="nav-link">
+          <img src="http://localhost/WebDev_Repository/assets/sidebar_img/bookpen.png" alt="Dashboard Icon" class="icon">
+          Books
+        </a>
+        <a href="http://localhost/WebDev_Repository/pages/user/user_home.html" class="nav-link logout">
+          <img src="http://localhost/WebDev_Repository/assets/sidebar_img/outv.png" alt="Dashboard Icon" class="icon">
+          Logout
+        </a>
+      </nav>
+    </div>
+
+    <div class="role-switch-container">
+      <h2 class="role-label">Role:</h2>
+      <label class="switch-label" id="switchLabel">
+        <input type="checkbox" id="roleSwitch" class="hidden" />
+        <span class="switch-bg"></span>
+        <span id="sliderIcon" class="slider-icon">😻</span>
+        <span id="roleText" class="role-text">Admin</span>
+
+        <div class="pin-container hidden left" id="pinContainerLeft">
+          <input type="password" maxlength="1" class="pin-input" />
+          <input type="password" maxlength="1" class="pin-input" />
+          <input type="password" maxlength="1" class="pin-input" />
+          <input type="password" maxlength="1" class="pin-input" />
+        </div>
+      </label>
+    </div>
+  </aside>
+  <main class="main-content">
+    <!-- Your content here -->
+  </main>
+
+</body>
+
+<script>
+  // This script handles the PIN input for the librarian role switch
+document.addEventListener('DOMContentLoaded', () => {
+  const pinContainerLeft = document.getElementById('pinContainerLeft');
+  const pinInputsLeft = pinContainerLeft.querySelectorAll('.pin-input');
+  const roleText = document.getElementById('roleText');
+
+function checkPin(container, inputs, correctPin) {
+  const enteredPin = Array.from(inputs).map(input => input.value).join('');
+  if (enteredPin.length === 4) {
+    if (enteredPin === correctPin) {
+      window.location.href = 'http://localhost/WebDev_Repository/pages/admin/librarian_navbar.html';
+    } else {
+      roleText.textContent = 'Invalid PIN';
+      roleText.style.display = '';
+      roleText.classList.add('error');
+
+      // After 3 seconds, reset text to "Librarian"
+      setTimeout(() => {
+        roleText.textContent = 'Librarian';
+        roleText.classList.remove('error');
+      }, 1500);
+    }
+
+    inputs.forEach(input => input.value = '');
+    container.classList.add('hidden');
+  }
+}
+
+  pinInputsLeft.forEach((input, index) => {
+    input.addEventListener('input', () => {
+      input.value = input.value.replace(/\D/, '');
+      if (input.value.length === 1 && index < pinInputsLeft.length - 1) {
+        pinInputsLeft[index + 1].focus();
+      }
+      checkPin(pinContainerLeft, pinInputsLeft, '1111'); // Correct PIN for librarian
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && input.value === '' && index > 0) {
+        pinInputsLeft[index - 1].focus();
+      }
+    });
+  });
+
+document.getElementById('switchLabel').addEventListener('click', (e) => {
+  e.preventDefault();
+  if (!pinContainerLeft.classList.contains('hidden')) {
+    pinContainerLeft.classList.add('hidden');
+    roleText.style.display = '';
+    roleText.textContent = 'Librarian';
+    roleText.classList.remove('error');
+  } else {
+    pinContainerLeft.classList.remove('hidden');
+    pinInputsLeft[0].focus();
+    roleText.style.display = 'none';
+  }
+});
+});
+</script>
+
+
+
+</html>

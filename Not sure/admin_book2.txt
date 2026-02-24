@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+ <style>
+body {
+  margin: 0;
+  display: flex;
+  height: 100vh;
+  background: linear-gradient(to bottom, #334155, #0f172a);
+  color: #f1f5f9;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden; /* Prevent double scrollbars */
+}
+
+
+.sidebar {
+  position: fixed;
+  width: 15rem;
+  height: 100%;
+  background: linear-gradient(to bottom, #f8fafc, #dbeafe);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.logo-img {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+.logo-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2563eb;
+  text-align: center;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  color: #1f2937;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.nav-link.active {
+  background-color: #bfdbfe;
+  color: #1e3a8a;
+  font-weight: 600;
+  border-left: 4px solid #2563eb;
+}
+
+.nav-link.logout {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.nav-link.logout:hover {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.role-switch-container {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-top: 2rem;
+  margin-bottom: 40px;
+}
+
+.role-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.switch-label {
+  position: relative;
+  display: inline-block;
+  width: 150px;
+  height: 50px;
+}
+
+.switch-label input.hidden {
+  display: none;
+}
+
+.switch-bg {
+  position: absolute;
+  inset: 0;
+  background-color: #6b21a8;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s;
+  width: 207px;
+  height: 50px;
+
+}
+
+input:checked + .switch-bg {
+  background-color: #1d4ed8;
+}
+
+.slider-icon {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  background: white;
+  color: #1f2937;
+  border-radius: 0.375rem;
+  transition: transform 0.3s;
+  z-index: 10;
+}
+
+.move-right {
+  transform: translateX(155px);
+}
+
+.role-text {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-weight: bold;
+  font-size: 0.85rem;
+  pointer-events: none;
+  margin-left: 80px;
+}
+
+.role-text.right {
+
+  right: 1rem;
+}
+
+.role-text.left {
+  left: -1.4rem;
+}
+
+.pin-container {
+  position: absolute;
+  display: flex;
+  gap: 0.5rem;
+  left: 50px;
+  top: 5px;
+  margin-bottom: 20px;
+  
+}
+
+.pin-container.left {
+  left: 50px;
+}
+
+.pin-container.right {
+  right: 100px;
+    margin-left: -44px; /* Adjust margin as needed */
+}
+
+.pin-container.hidden {
+  display: none;
+}
+
+.pin-input {
+  width: 24px;
+  height: 34px;
+  text-align: center;
+  border: 2px solid #9333ea;
+  border-radius: 0.375rem;
+}
+
+.pin-input:focus {
+  border-color: #ec4899;
+  background-color: #fce7f3;
+  outline: none;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto; /* Allow vertical scrolling */
+  padding: 1rem 2rem 2rem 2rem; /* Adjust padding */
+  margin-left: 17rem; /* Space for sidebar */
+  height: 100%; /* Ensure it fills the viewport */
+  box-sizing: border-box; /* Include padding in height calculation */
+}
+
+.book-container {
+  background: #ffffff;
+  width: 100%;
+  max-width: 993px;
+  padding: 20px;
+  margin: 0 auto; /* Center horizontally */
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+    .search-bar-container {
+      display: flex;
+      justify-content: center;
+      border-radius: 20px;
+    }
+
+    .search-input {
+      flex: 1;
+      max-width: 500px;
+      padding: 10px 16px;
+      border: 1px solid #e1e8eb;
+      border-radius: 30px 0 0 30px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    .search-button {
+      padding: 10px 24px;
+      background-color: #0077cc;
+      color: #e1e8eb;
+      border: none;
+      border-radius: 0 30px 30px 0;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .search-button:hover {
+      background-color: #005fa3;
+    }
+
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 17px;
+    }
+
+.book-card {
+      background-color: #e1e8eb;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+      overflow: hidden;
+      transition: transform 0.18s, box-shadow 0.18s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin-right: 10px;
+      padding: 1px;
+      position: relative;
+    }
+
+    .book-card:hover {
+      transform: translateY(-7px) scale(1.03);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+
+    .book-card .book-cover {
+      width: 186px;
+      height: 280px;
+      margin-top: 0px;
+      margin-bottom: 6px;
+      border-radius: 7px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      background: #e1e8eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-card .book-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .book-title {
+      font-weight: bold;
+      font-size: 1.08rem;
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      padding: 0 10px;
+      color: #222;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-author {
+      font-size: 0.97rem;
+      color: #4a6fa1;
+      margin-bottom: 8px;
+      text-align: center;
+      padding: 0 16px;
+    }
+
+   .search-radio-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px; /* Adjust spacing between elements */
+    margin-bottom: 25px;
+    padding: 10px; /* Add padding for better alignment */
+  }
+
+  .radio-inputs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px; /* Adjust spacing between radio buttons */
+    border-radius: 0.5rem;
+    background-color: #c1d8e6;
+    box-sizing: border-box;
+    box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
+    padding: 0.25rem;
+    width: auto; /* Adjust width to fit content */
+    font-size: 14px;
+  }
+
+  .radio-inputs .radio {
+    flex: 1;
+    text-align: center;
+  }
+
+  .radio-inputs .radio input {
+    display: none;
+  }
+
+  .radio-inputs .radio .name {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    border: none;
+    padding: .5rem 1rem; /* Adjust padding for better alignment */
+    color: #555;
+    transition: all .15s ease-in-out;
+  }
+
+  .radio-inputs .radio input:checked + .name {
+    background-color: #f4f4f4;
+    font-weight: 600;
+  }
+
+.search-bar-container {
+  display: flex;
+  flex: 1;
+  max-width: 500px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 40px 10px 16px; /* may space sa kanan para sa icon */
+  border: 1px solid #e1e8eb;
+  border-radius: 8px; /* same sa .radio-inputs */
+  outline: none;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #777;
+  font-size: 16px;
+  pointer-events: none; /* para hindi clickable */
+}
+
+    /* Responsive tweaks */
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+        padding: 17px;
+      }
+
+      .book-container {
+        padding: 10px;
+      }
+
+      .search-bar-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .search-input {
+        width: 100%;
+        border-radius: 30px;
+        margin-bottom: 10px;
+      }
+
+      .search-button {
+        border-radius: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+    <div>
+      <div class="logo-container">
+        <img src="http://localhost/WebDev_Repository/assets/img_icon/granby_logo.png" alt="Logo" class="logo-img">
+        <h3 class="logo-title">GCST Library</h3>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#" class="nav-link active">
+          <span class="icon">📄</span>
+          Requests
+        </a>
+        <a href="#" class="nav-link">
+          <span class="icon">⏰</span>
+          Non-Returned
+        </a>
+        <a href="#" class="nav-link">
+          <span class="icon">📚</span>
+          Issued Books
+        </a>
+        <a href="#" class="nav-link logout">
+          <span class="icon">🚪</span>
+          Logout
+        </a>
+      </nav>
+    </div>
+
+    <div class="role-switch-container">
+      <h2 class="role-label">Role:</h2>
+      <label class="switch-label" id="switchLabel">
+        <input type="checkbox" id="roleSwitch" class="hidden" />
+        <span class="switch-bg"></span>
+        <span id="sliderIcon" class="slider-icon">😺</span>
+        <span id="roleText" class="role-text">Librarian</span>
+
+        <div class="pin-container hidden left" id="pinContainerLeft">
+          <input type="text" maxlength="1" class="pin-input" />
+          <input type="text" maxlength="1" class="pin-input" />
+          <input type="text" maxlength="1" class="pin-input" />
+          <input type="text" maxlength="1" class="pin-input" />
+        </div>
+        <div class="pin-container hidden right" id="pinContainerRight">
+          <input type="text" maxlength="1" class="pin-input" />
+          <input type="text" maxlength="1" class="pin-input" />
+          <input type="text" maxlength="1" class="pin-input" />
+          <input type="text" maxlength="1" class="pin-input" />
+        </div>
+      </label>
+    </div>
+  </aside>
+
+
+  <div class="main-content">
+<div class="book-container">
+<div class="search-radio-container">
+  <!-- Left: Radio Inputs -->
+  <div class="radio-inputs">
+    <label class="radio">
+      <input type="radio" name="status-filter" value="available" checked>
+      <span class="name">Available</span>
+    </label>
+    <label class="radio">
+      <input type="radio" name="status-filter" value="unavailable">
+      <span class="name">Unavailable</span>
+    </label>
+  </div>
+
+  <!-- Right: Search Bar -->
+  <div class="search-bar-container">
+    <div class="search-input-wrapper">
+      <input type="text" class="search-input" placeholder="Search for books, authors, or genres...">
+      <i class="fas fa-search search-icon"></i>
+    </div>
+  </div>
+</div>
+
+  <div class="book-grid">
+  <!-- Book cards will be injected here by JavaScript -->
+</div>
+
+<div id="adminBookModal" class="modal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.4);justify-content:center;align-items:center;">
+  <div class="modal-content" style="background:#fff;padding:20px;border-radius:12px;width:400px;max-width:90%;position:relative;box-shadow:0 8px 16px rgba(0,0,0,0.2);">
+    <span class="close-button" style="position:absolute;top:10px;right:15px;margin-left: 30px;font-size:24px;font-weight:bold;cursor:pointer;">&times;</span>
+    <div id="admin-modal-body" class="modal-body" style="display:flex;gap:20px;align-items:flex-start;">
+      <!-- Modal content will be injected by JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+  let booksData = [];
+
+// Add modal logic for admin
+function showAdminBookModal(book, imgSrc) {
+  const modal = document.getElementById("adminBookModal");
+  const modalBody = document.getElementById("admin-modal-body");
+modalBody.innerHTML = `
+  <img src="${imgSrc}" alt="Cover of ${book.book_name}" style="width:120px;height:190px;object-fit:cover;border-radius:8px;">
+  <div class="book-info" style="flex:1;">
+    <h3 style="margin:0 0 10px;font-size:1.2rem;">${book.book_name}</h3>
+    <div class="book-author"><strong>Author:</strong> ${book.book_author}</div>
+    
+    <!-- CATEGORY + QUANTITY GROUP -->
+    <div style="display: flex; gap: 10px; align-items: center; margin-top: 5px; margin-bottom: 10px;">
+      <div class="category" style="background:#e0e7ff;padding:6px 12px;border-radius:6px;font-size:0.9rem;font-weight:500;">
+        ${book.book_category || 'Unknown Category'}
+      </div>
+      <div class="quantity" style="background:#fef3c7;padding:6px 12px;border-radius:6px;font-size:0.9rem;font-weight:500;color:#92400e;">
+        Qty: ${book.quantity ?? 'N/A'}
+      </div>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <p class="description" style="margin:15px 0;font-size:0.95rem;color:#444;line-height:1.5;">
+      ${book.book_description || 'No description available.'}
+    </p>
+
+    <!-- BUTTONS -->
+    <div class="modal-buttons" style="display:flex;gap:10px;margin-top:10px;">
+      <button class="btn-edit" style="padding:8px 14px;border:none;border-radius:6px;font-weight:600;cursor:pointer;background:#60a5fa;color:#fff;">Edit Book</button>
+      <button class="btn-unavailable" style="padding:8px 14px;border:none;border-radius:6px;font-weight:600;cursor:pointer;background:#ef4444;color:#fff;">Set Unavailable</button>
+    </div>
+  </div>
+`;
+
+  // Edit button logic
+    modalBody.querySelector('.btn-edit').addEventListener('click', () => {
+      if (book.quantity && book.fine_value) {
+        window.location.href = `edit_book.html?book_id=${encodeURIComponent(book.book_id)}&quantity=${encodeURIComponent(book.quantity)}&fine_value=${encodeURIComponent(book.fine_value)}`;
+      } else {
+        alert('Missing quantity or fine value for this book.');
+      }
+    });
+
+// Update modal logic for unavailable button
+modalBody.querySelector('.btn-unavailable').addEventListener('click', () => {
+  if (confirm('Are you sure you want to set this book as unavailable?')) {
+    fetch('http://localhost/WebDev_Repository/utils/set_book_unavailable.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ book_id: book.book_id })
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        alert('Book set to unavailable!');
+        modal.style.display = "none";
+        // Re-render books with unavailable status
+        renderBooks(booksData, 'unavailable');
+      } else {
+        alert('Failed to update book: ' + (res.message || 'Unknown error.'));
+      }
+    })
+    .catch(() => {
+      alert('Failed to update book: Network error.');
+    });
+  }
+});
+
+  modal.style.display = "flex";
+}
+
+// Modal close logic
+window.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById("adminBookModal");
+  const closeBtn = modal.querySelector(".close-button");
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (event) => {
+    if (event.target == modal) modal.style.display = "none";
+  };
+});
+
+// Update renderBooks to handle both available and unavailable books
+function renderBooks(books, filterStatus = 'available') {
+  const container = document.querySelector('.book-grid');
+  container.innerHTML = '';
+  
+  // Filter books based on the status
+  const filteredBooks = books.filter(book => book.book_status === filterStatus);
+  if (filteredBooks.length === 0) {
+    container.innerHTML = `<p>No ${filterStatus} books found.</p>`;
+    return;
+  }
+
+  filteredBooks.forEach(book => {
+    const card = document.createElement('div');
+    card.className = 'book-card';
+    const imgSrc = book.book_image && book.book_image !== "" 
+      ? book.book_image 
+      : 'http://localhost/WebDev_Repository/assets/img_bg/book_details.png';
+    card.innerHTML = `
+      <div class="book-cover">
+        <img src="${imgSrc}" alt="Cover of ${book.book_name}" />
+      </div>
+      <div class="book-title">${book.book_name}</div>
+      <div class="book-author">${book.book_author}</div>
+    `;
+    // Open modal on click
+    card.addEventListener('click', () => showAdminBookModal(book, imgSrc));
+    container.appendChild(card);
+  });
+}
+
+</script>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  fetch('http://localhost/WebDev_Repository/utils/fetch.php')
+    .then(response => response.json())
+    .then(data => {
+      booksData = Array.isArray(data) ? data : [];
+      renderBooks(booksData); // Default to available books
+    })
+    .catch(error => {
+      console.error('Error loading books:', error);
+      document.querySelector('.book-grid').innerHTML = '<p>Error loading books.</p>';
+    });
+
+
+// Search functionality
+const searchInput = document.querySelector('.search-input');
+function handleSearch() {
+  const query = searchInput.value.trim().toLowerCase();
+  const filterStatus = document.querySelector('input[name="status-filter"]:checked').value;
+
+  if (!query) {
+    renderBooks(booksData, filterStatus);
+    return;
+  }
+
+  const filtered = booksData.filter(book => {
+    return (
+      (book.book_status === filterStatus) &&
+      (
+        (book.book_name && book.book_name.toLowerCase().includes(query)) ||
+        (book.book_author && book.book_author.toLowerCase().includes(query)) ||
+        (book.book_category && book.book_category.toLowerCase().includes(query))
+      )
+    );
+  });
+  renderBooks(filtered, filterStatus);
+}
+
+// Real-time search habang nagta-type
+searchInput.addEventListener('input', handleSearch);
+
+// Filter books by status when radio buttons change
+document.querySelectorAll('input[name="status-filter"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    handleSearch(); // Para updated agad kahit may filter
+  });
+});
+});
+</script>
+      </div>
+    </div>
+  </div>
+<script>
+  // Sidebar active state and navigation handling
+  function saveActiveLink(text) {
+    localStorage.setItem('activeLinkText', text.trim());
+  }
+
+  function saveRole(isAdmin) {
+    localStorage.setItem('currentRole', isAdmin ? 'admin' : 'librarian');
+  }
+
+  function restoreActiveLink() {
+    const activeLinkText = localStorage.getItem('activeLinkText');
+    const links = document.querySelectorAll('.nav-link');
+    links.forEach(link => {
+      if (link.textContent.trim() === activeLinkText) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const checkbox = document.getElementById('roleSwitch');
+    const roleText = document.getElementById('roleText');
+    const sliderIcon = document.getElementById('sliderIcon');
+    const pinContainerLeft = document.getElementById('pinContainerLeft');
+    const pinContainerRight = document.getElementById('pinContainerRight');
+    const pinInputsLeft = pinContainerLeft.querySelectorAll('.pin-input');
+    const pinInputsRight = pinContainerRight.querySelectorAll('.pin-input');
+    const navMenu = document.querySelector('.nav-menu');
+
+    const librarianLinks = [
+      { href: '#', text: 'Requests', icon: '📄' },
+      { href: '#', text: 'Non-Returned', icon: '⏰' },
+      { href: 'http://localhost/WebDev_Repository/pages/admin/admin_issued.html', text: 'Issued Books', icon: '📚' },
+      { href: '#', text: 'Logout', icon: '🚪', class: 'logout' }
+    ];
+
+    const adminLinks = [
+      { href: '#', text: 'Dashboard', icon: '📊' },
+      { href: '#', text: 'Create', icon: '➕' },
+      { href: 'http://localhost/WebDev_Repository/pages/admin/admin_book2.html', text: 'Books', icon: '📘' },
+      { href: '#', text: 'Logout', icon: '🚪', class: 'logout' }
+    ];
+
+    checkbox.addEventListener('change', () => {
+      const isAdmin = checkbox.checked;
+
+      roleText.textContent = isAdmin ? 'Admin' : 'Librarian';
+      roleText.classList.toggle('left', isAdmin);
+      roleText.classList.toggle('right', !isAdmin);
+      sliderIcon.textContent = isAdmin ? '😻' : '😺';
+      sliderIcon.classList.toggle('move-right', isAdmin);
+      updateNavLinks(isAdmin ? adminLinks : librarianLinks);
+
+      pinContainerLeft.classList.add('hidden');
+      pinContainerRight.classList.add('hidden');
+      roleText.style.display = '';
+      saveRole(isAdmin);
+    });
+
+    document.getElementById('switchLabel').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (checkbox.checked) {
+        togglePinContainer(pinContainerRight, pinInputsRight);
+      } else {
+        togglePinContainer(pinContainerLeft, pinInputsLeft);
+      }
+    });
+
+    function togglePinContainer(container, inputs) {
+      if (container.classList.contains('hidden')) {
+        container.classList.remove('hidden');
+        inputs[0].focus();
+        roleText.style.display = 'none';
+      }
+    }
+
+    function checkPin(container, inputs, correctPin) {
+      const enteredPin = Array.from(inputs).map(input => input.value).join('');
+      if (enteredPin.length === 4) {
+        if (enteredPin === correctPin) {
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event('change'));
+        } else {
+          alert('Incorrect PIN. Try again.');
+        }
+
+        inputs.forEach(input => input.value = '');
+        container.classList.add('hidden');
+        roleText.style.display = '';
+      }
+    }
+
+    pinInputsRight.forEach((input, index) => {
+      setupPinInput(input, index, pinInputsRight, pinContainerRight, '5678');
+    });
+
+    pinInputsLeft.forEach((input, index) => {
+      setupPinInput(input, index, pinInputsLeft, pinContainerLeft, '1234');
+    });
+
+    function setupPinInput(input, index, inputs, container, correctPin) {
+      input.addEventListener('input', () => {
+        input.value = input.value.replace(/\D/, '');
+        if (input.value.length === 1 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+        checkPin(container, inputs, correctPin);
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && input.value === '' && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+    }
+
+    function updateNavLinks(linksData) {
+      navMenu.innerHTML = '';
+      linksData.forEach((linkData) => {
+        const link = document.createElement('a');
+        link.href = linkData.href;
+        link.className = `nav-link ${linkData.class || ''}`;
+        link.innerHTML = `<span class="icon">${linkData.icon}</span>${linkData.text}`;
+        navMenu.appendChild(link);
+
+        // Add click event to each link
+        link.addEventListener('click', function (e) {
+          if (this.getAttribute('href') === '#') {
+            e.preventDefault();
+          }
+          document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+          saveActiveLink(this.textContent);
+        });
+      });
+
+      // Restore active link after updating nav
+      setTimeout(restoreActiveLink, 50);
+    }
+
+    // Restore role and links on page load
+    const savedRole = localStorage.getItem('currentRole');
+    if (savedRole === 'admin') {
+      checkbox.checked = true;
+      roleText.textContent = 'Admin';
+      roleText.classList.add('left');
+      sliderIcon.textContent = '😻';
+      sliderIcon.classList.add('move-right');
+      updateNavLinks(adminLinks);
+    } else {
+      checkbox.checked = false;
+      roleText.textContent = 'Librarian';
+      roleText.classList.add('right');
+      sliderIcon.textContent = '😺';
+      sliderIcon.classList.remove('move-right');
+      updateNavLinks(librarianLinks);
+    }
+
+    // Clear localStorage on logout
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.logout')) {
+        localStorage.removeItem('currentRole');
+        localStorage.removeItem('activeLinkText');
+      }
+    });
+  });
+</script>
+
+
+</body>
+</html>

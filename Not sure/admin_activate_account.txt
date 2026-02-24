@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Re-activate Students - Admin</title>
+  <link rel="stylesheet" href="http://localhost/WebDev_Repository/styles/admin_sidebar.css" />
+  <style>
+      html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      overflow: hidden; 
+    }
+
+    button.activate-btn {
+      padding: 6px 12px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button.activate-btn:hover {
+      background-color: #388e3c;
+    }
+
+    .main-content {
+      margin-left: 223px; /* Sidebar width */
+      height: 100vh;
+      overflow-y: auto; /* Enable vertical scrolling */
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .content-box {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      width: 1120px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      vertical-align: top;
+    }
+    th {
+      background-color: #e1e8eb;
+    }
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.header-row h2 {
+  margin: 0;
+}
+
+.header-row input[type="text"] {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 450px;
+  margin-left: 20px;
+}
+
+th:nth-child(1) { width: 60px; }      /* ID */
+th:nth-child(2) { width: 220px; }     /* Student Name */
+th:nth-child(3) { width: 220px; }     /* Email */
+th:nth-child(4) { width: 130px; }     /* Phone Number */
+th:nth-child(5) { width: 90px; }     /* Course */
+th:nth-child(6) { width: 90px; }     /* Year&Section */
+th:nth-child(7) { width: 90px; }  
+
+  </style>
+</head>
+<body>
+
+    <div class="sidebar">
+      <div class="admin-header">
+      <img src="http://localhost/WebDev_Repository/assets/img_icon/granby_logo.png" alt="Logo" class="logo">
+         <h3> GCST Library
+         </h3>
+      </div>
+      <a href="http://localhost/WebDev_Repository/pages/admin/home.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/home-color.png" class="icon"><strong>Home</strong> </a>
+      <a href="http://localhost/WebDev_Repository/pages/admin/admin_book.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/book-colored.png" class="icon"> <strong>Books</strong></a>
+       <div class="sidebar-divider"></div>
+      <a href="http://localhost/WebDev_Repository/pages/admin/create.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/create-color.png" class="icon"><strong>Create</strong></a>
+      <div class="sidebar-divider"></div>
+      <a href="http://localhost/WebDev_Repository/pages/admin/request.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/request-color.png" class="icon"><strong>Requests</strong></a>
+      <a href="http://localhost/WebDev_Repository/pages/admin/profile.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/students-color.png" class="icon"><strong>Profile</strong></a>
+      <a href="http://localhost/WebDev_Repository/pages/admin/report.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/report-color.png" class="icon"><strong>Reports</strong></a>
+      <a href="http://localhost/WebDev_Repository/pages/user/user_home.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/logout-color.png" class="icon"> <strong>Logout</strong></a>
+    </div>
+
+ <div class="main-content">
+  <div class="content-box">
+    <div class="header-row">
+      <h2>Re-activate Students</h2>
+      <input type="text" id="studentSearch" placeholder="Search students..." />
+    </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Student Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Course</th>
+            <th>Year&Section</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    let allUsers = [];
+
+    // Fetch suspended users from backend
+    fetch('http://localhost/WebDev_Repository/utils/get_suspended_users.php')
+        .then(response => response.json())
+        .then(users => {
+            allUsers = users;
+            renderTable(users);
+        });
+
+    // Render table rows
+    function renderTable(users) {
+        const tbody = document.querySelector('tbody');
+        tbody.innerHTML = '';
+        users.forEach(user => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${user.student_id}</td>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>${user.contact_number || ''}</td>
+                <td>${user.course || ''}</td>
+                <td>${user.year_section || ''}</td>
+                <td>
+                    <button class="activate-btn" data-id="${user.student_id}">Activate</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Add event listeners for activate buttons
+        document.querySelectorAll('.activate-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const studentId = this.getAttribute('data-id');
+                if (confirm('Are you sure you want to re-activate this account?')) {
+                    fetch('http://localhost/WebDev_Repository/utils/activate_user.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'student_id=' + encodeURIComponent(studentId)
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            // Remove activated user from table
+                            allUsers = allUsers.filter(u => u.student_id !== studentId);
+                            renderTable(allUsers);
+                        } else {
+                            alert('Failed to activate user.');
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    // Search functionality
+    document.getElementById('studentSearch').addEventListener('input', function() {
+        const search = this.value.toLowerCase();
+        const filtered = allUsers.filter(user =>
+            (user.student_id && user.student_id.toLowerCase().includes(search)) ||
+            (user.name && user.name.toLowerCase().includes(search)) ||
+            (user.email && user.email.toLowerCase().includes(search)) ||
+            (user.contact_number && user.contact_number.toLowerCase().includes(search)) ||
+            (user.course && user.course.toLowerCase().includes(search)) ||
+            (user.year_section && user.year_section.toLowerCase().includes(search))
+        );
+        renderTable(filtered);
+    });
+});
+</script>
+
+</body>
+</html>

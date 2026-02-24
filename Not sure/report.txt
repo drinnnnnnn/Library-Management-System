@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reports - Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .font-poppins {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="flex h-screen bg-gradient-to-b from-slate-700 to-slate-900 text-gray-100">
+
+  <!-- Sidebar -->
+  <aside class="w-60 h-full bg-gradient-to-b from-slate-100 to-blue-100 shadow-md p-5 flex flex-col justify-between">
+    <div>
+      <!-- Logo + Title -->
+      <div class="flex flex-col items-center mb-10">
+        <img src="http://localhost/WebDev_Repository/assets/img_icon/granby_logo.png" alt="Logo" class="w-12 h-12 object-contain mb-2">
+        <h3 class="text-xl font-semibold text-blue-600 text-center font-poppins">GCST Library</h3>
+      </div>
+
+      <!-- Nav Menu -->
+      <nav id="sidebar-nav" class="space-y-3">
+        <a href="#" class="sidebar-link active-link flex items-center gap-3 px-4 py-2 rounded-md text-blue-900 font-semibold bg-blue-200 border-l-4 border-blue-600">
+          <i data-lucide="file-text" class="w-5 h-5"></i>
+          Requests
+        </a>
+        <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-2 rounded-md text-gray-800 font-medium hover:bg-blue-100 hover:text-blue-700 transition">
+          <i data-lucide="clock" class="w-5 h-5"></i>
+          Non-Returned
+        </a>
+        <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-2 rounded-md text-gray-800 font-medium hover:bg-blue-100 hover:text-blue-700 transition">
+          <i data-lucide="book-open" class="w-5 h-5"></i>
+          Issued Books
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-md text-red-600 font-semibold hover:bg-red-100 hover:text-red-700 transition">
+          <i data-lucide="log-out" class="w-5 h-5"></i>
+          Logout
+        </a>
+      </nav>
+    </div>
+
+    <!-- Role Switch Component -->
+    <div class="mt-8 bg-white shadow-md rounded-lg px-4 py-3">
+      <h2 class="text-md font-semibold text-gray-800 mb-2">Role:</h2>
+      <label class="relative inline-block w-[150px] h-[50px]">
+        <input type="checkbox" id="roleSwitch" class="hidden peer" />
+        <span class="absolute inset-0 bg-purple-800 peer-checked:bg-blue-700 rounded-lg transition duration-300"></span>
+        <!-- Icon -->
+        <span id="sliderIcon"
+          class="absolute left-[5px] bottom-[5px] h-[40px] w-[40px] flex items-center justify-center text-lg font-bold bg-white text-gray-800 rounded-md transition duration-300 z-10">
+          😺
+        </span>
+        <!-- Role Label -->
+        <span id="roleText"
+          class="absolute top-1/2 -translate-y-1/2 right-4 text-white font-bold text-sm transition-all duration-300 pointer-events-none">
+          Librarian
+        </span>
+      </label>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto p-8">
+    <!-- Your content here -->
+  </main>
+
+  <!-- Scripts -->
+  <script>
+    // Initialize lucide icons
+    lucide.createIcons();
+
+    // Sidebar active state logic
+    const links = document.querySelectorAll('.sidebar-link');
+    links.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        links.forEach(l => l.classList.remove(
+          'bg-blue-200', 'text-blue-900', 'font-semibold', 'border-l-4', 'border-blue-600', 'active-link'
+        ));
+
+        this.classList.add('bg-blue-200', 'text-blue-900', 'font-semibold', 'border-l-4', 'border-blue-600', 'active-link');
+      });
+    });
+
+    // Role switch logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const checkbox = document.getElementById('roleSwitch');
+      const roleText = document.getElementById('roleText');
+      const sliderIcon = document.getElementById('sliderIcon');
+
+      checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+          roleText.textContent = 'Admin';
+          roleText.classList.remove('right-4');
+          roleText.classList.add('left-4');
+          sliderIcon.textContent = '😻';
+          sliderIcon.classList.add('translate-x-[95px]');
+        } else {
+          roleText.textContent = 'Librarian';
+          roleText.classList.remove('left-4');
+          roleText.classList.add('right-4');
+          sliderIcon.textContent = '😺';
+          sliderIcon.classList.remove('translate-x-[95px]');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

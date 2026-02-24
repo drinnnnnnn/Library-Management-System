@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reports - Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Tailwind custom font */
+    .font-poppins {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="flex h-screen bg-gradient-to-b from-slate-700 to-slate-900 text-gray-100">
+
+  <!-- Sidebar -->
+  <aside class="w-60 h-full bg-gradient-to-b from-slate-100 to-blue-100 shadow-md p-5">
+    <div class="flex flex-col items-center mb-10">
+      <img src="http://localhost/WebDev_Repository/assets/img_icon/granby_logo.png" alt="Logo" class="w-12 h-12 object-contain mb-2">
+      <h3 class="text-xl font-semibold text-blue-600 text-center font-poppins">GCST Library</h3>
+    </div>
+    
+    <nav class="space-y-3">
+      <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-md text-gray-800 font-medium hover:bg-blue-100 hover:text-blue-700 transition">
+        <i data-lucide="file-text" class="w-5 h-5"></i>
+        Requests
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-md text-gray-800 font-medium hover:bg-blue-100 hover:text-blue-700 transition">
+        <i data-lucide="clock" class="w-5 h-5"></i>
+        Non-Returned
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-md text-gray-800 font-medium hover:bg-blue-100 hover:text-blue-700 transition">
+        <i data-lucide="book-open" class="w-5 h-5"></i>
+        Issued Books
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-md text-red-600 font-semibold hover:bg-red-100 hover:text-red-700 transition">
+        <i data-lucide="log-out" class="w-5 h-5"></i>
+        Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto p-8">
+    <!-- Your content here -->
+  </main>
+
+  <script>
+    lucide.createIcons();
+  </script>
+
+</body>
+</html>

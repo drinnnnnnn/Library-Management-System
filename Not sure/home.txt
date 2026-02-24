@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Admin</title>
+  <link rel="stylesheet" href="http://localhost/WebDev_Repository/styles/admin_sidebar.css">
+  <link rel="stylesheet" href="http://localhost/WebDev_Repository/styles/admin_dashboard.css">
+
+</head>
+
+<body>
+
+    <div class="sidebar">
+      <div class="admin-header">
+      <img src="http://localhost/WebDev_Repository/assets/img_icon/granby_logo.png" alt="Logo" class="logo">
+         <h3> GCST Library
+         </h3>
+      </div>
+      <a href="http://localhost/WebDev_Repository/pages/admin/home.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/home-color.png" class="icon"><strong>Home</strong> </a>
+      <a href="http://localhost/WebDev_Repository/pages/admin/admin_book.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/book-colored.png" class="icon"> <strong>Books</strong></a>
+       <div class="sidebar-divider"></div>
+      <a href="http://localhost/WebDev_Repository/pages/admin/create.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/create-color.png" class="icon"><strong>Create</strong></a>
+      <div class="sidebar-divider"></div>
+      <a href="http://localhost/WebDev_Repository/pages/admin/request.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/request-color.png" class="icon"><strong>Requests</strong></a>
+      <a href="http://localhost/WebDev_Repository/pages/admin/profile.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/students-color.png" class="icon"><strong>Profile</strong></a>
+      <a href="http://localhost/WebDev_Repository/pages/user/user_home.html"><img src="http://localhost/WebDev_Repository/assets/img_icon/logout-color.png" class="icon"> <strong>Logout</strong></a>
+    </div>
+
+  <div class="main-content">
+    <div class="dashboard-box">
+      <h1>Dashboard Overview</h1>
+
+<div class="cards">
+<div class="card blue">
+  <div class="card-content">
+    <div class="icon">📚</div>
+    <div class="text"><h2>Available Books</h2></div>
+  </div>
+  <p id="totalBooks">0</p>
+</div>
+
+  <div class="card orange">
+    <div class="card-content">
+      <div class="icon">📂</div>
+      <div class="text"><h2>Categories</h2></div>
+    </div>
+    <p id="totalCategories">0</p>
+  </div>
+
+  <div class="card green">
+    <div class="card-content">
+      <div class="icon">👥</div>
+      <div class="text"><h2>Members</h2></div>
+    </div>
+    <p id="totalMembers">0</p>
+  </div>
+
+  <div class="card red">
+    <div class="card-content">
+      <div class="icon">🔒</div>
+      <div class="text"><h2>Suspended Accounts</h2></div>
+    </div>
+    <p id="totalSuspended">0</p>
+  </div>
+
+<div class="card cyan">
+  <div class="card-content">
+    <div class="icon">📥</div>
+    <div class="text"><h2>Pending Requests</h2></div>
+  </div>
+  <p id="pendingRequests">0</p>
+</div>
+
+  <div class="card yellow">
+    <div class="card-content">
+      <div class="icon">🎯</div>
+      <div class="text"><h2>Overdue book</h2></div>
+    </div>
+    <p id="totalOverdueBooks">0</p>
+  </div>
+
+  <div class="card purple">
+    <div class="card-content">
+      <div class="icon">🛠️</div>
+      <div class="text"><h2>Unavailable Books</h2></div>
+    </div>
+    <p id="totalUnavailableBooks">0</p>
+  </div>
+
+  <div class="card pink">
+    <div class="card-content">
+      <div class="icon">⌛</div>
+      <div class="text"><h2>Non-returned Books</h2></div>
+    </div>
+    <p id="totalNonReturnedBooks">0</p>
+  </div>
+
+  <div class="card lime">
+    <div class="card-content">
+      <div class="icon">🥰</div>
+      <div class="text"><h2>Issued Books</h2></div>
+    </div>
+    <p id="totalIssuedBooks">0</p>
+  </div>
+</div>
+
+
+      <div class="quick-actions">
+        <h3>More Actions:</h3>
+          <a href="http://localhost/WebDev_Repository/pages/admin/add_category.html" class="add" style="display: inline-block; padding: 6px 6px; background-color: #ffffff; color: white; border-radius: 4px; text-decoration: none; font-family: sans-serif;">
+            <button class="add">📝 Manage Category</button>
+          </a>  
+          <a href="http://localhost/WebDev_Repository/pages/admin/admin_manage_members.html" class="add" style="display: inline-block; padding: 6px 6px; background-color: #ffffff; color: white; border-radius: 4px; text-decoration: none; font-family: sans-serif;">
+        <button class="suspend">⛔ Suspend Account</button>
+        </a>
+        <a href="http://localhost/WebDev_Repository/pages/admin/admin_activate_account.html" class="add" style="display: inline-block; padding: 6px 6px; background-color: #ffffff; color: white; border-radius: 4px; text-decoration: none; font-family: sans-serif;">
+        <button class="suspend">🔓 Activate Account</button>
+        </a>
+        <a href="#" class="add" style="display: inline-block; padding: 6px 6px; background-color: #ffffff; color: white; border-radius: 4px; text-decoration: none; font-family: sans-serif;">
+        <button class="suspend">🪄 Re-activate Books</button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+<script>
+fetch('/WebDev_Repository/utils/get_counts.php')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('totalCategories').textContent = data.total_categories ?? 0;
+  });
+</script>
+
+<!-- count -->
+<script>
+fetch('/WebDev_Repository/utils/get_counts.php')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('totalBooks').textContent = data.total_books ?? 0;
+    document.getElementById('totalCategories').textContent = data.total_categories ?? 0;
+    document.getElementById('totalMembers').textContent = data.total_members ?? 0;
+    document.getElementById('pendingRequests').textContent = data.pending_requests ?? 0;
+    document.getElementById('totalNonReturnedBooks').textContent = data.total_non_returned_books ?? 0;
+    document.getElementById('totalIssuedBooks').textContent = data.total_issued_books ?? 0;
+    document.getElementById('totalSuspended').textContent = data.total_suspended ?? 0;
+    document.getElementById('totalOverdueBooks').textContent = data.overdue_books ?? 0;
+  });
+</script>
+
+
+
+    </body>
+</html>
